@@ -1,0 +1,17 @@
+KHI NÀO NÊN DÙNG STATIC VÀ KHI NÀO TUYỆT ĐỐI PHẢI DÙNG INSTANCE ĐỂ BẢO VỆ AN TOÀN DỮ LIỆU?
+
+Biến static (Class variable) được lưu trên vùng nhớ Metaspace, chỉ tồn tại một bản sao
+duy nhất cho toàn bộ lớp, bất kể tạo bao nhiêu đối tượng. Nên dùng static khi biến đó
+mang tính cấu hình chung, không thay đổi theo từng đối tượng, ví dụ: lãi suất ngân hàng
+(interestRate), tên ngân hàng (BANK_NAME), hoặc bộ đếm tổng số tài khoản (totalAccounts).
+Với hệ thống 10 triệu đối tượng, một biến double chiếm 8 byte, nếu để instance sẽ tốn
+80MB RAM chỉ cho một biến, trong khi static chỉ tốn đúng 8 byte.
+
+Ngược lại, biến instance được lưu trên Heap, mỗi đối tượng sở hữu bản sao riêng biệt.
+Tuyệt đối phải dùng instance cho các biến mang trạng thái riêng tư của từng đối tượng,
+ví dụ: số dư tài khoản (balance), tên chủ tài khoản (ownerName). Nếu sai lầm khai báo
+balance là static, toàn bộ khách hàng sẽ dùng chung một ví tiền, khi một người nạp tiền
+thì tất cả đều thấy số dư thay đổi - đây chính là thảm họa đã xảy ra với BugBank.
+
+Quy tắc vàng: Nếu giá trị thuộc về MỖI đối tượng riêng biệt -> dùng instance.
+Nếu giá trị thuộc về CẢ lớp, dùng chung cho mọi đối tượng -> dùng static.
